@@ -1,62 +1,177 @@
+// Hero Section Functionality
+function initializeHeroSection() {
+    // Hero Search Functionality
+    const searchInput = document.querySelector('.hero-search-input');
+    const searchBtn = document.querySelector('.hero-search-btn');
+    
+    if (searchBtn) {
+        searchBtn.addEventListener('click', function() {
+            const searchValue = searchInput.value.trim();
+            if (searchValue) {
+                // Add search animation
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                    console.log('البحث عن:', searchValue);
+                    // Here you would implement actual search
+                }, 200);
+            }
+        });
+        
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchBtn.click();
+            }
+        });
+    }
+    
+    // Quick Filters Functionality
+    const filterChips = document.querySelectorAll('.filter-chip');
+    filterChips.forEach(chip => {
+        chip.addEventListener('click', function() {
+            // Remove active from all
+            filterChips.forEach(c => c.classList.remove('active'));
+            // Add active to clicked
+            this.classList.add('active');
+            
+            // Animation effect
+            this.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 200);
+        });
+    });
+    
+    // Animate hero stats numbers
+    const statNumbers = document.querySelectorAll('.stat-number');
+    const animateNumbers = () => {
+        statNumbers.forEach(stat => {
+            const target = parseInt(stat.textContent);
+            const increment = target / 50;
+            let current = 0;
+            
+            const updateNumber = () => {
+                if (current < target) {
+                    current += increment;
+                    stat.textContent = Math.ceil(current) + '+';
+                    requestAnimationFrame(updateNumber);
+                } else {
+                    stat.textContent = target + '+';
+                }
+            };
+            
+            // Start animation when in viewport
+            const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    updateNumber();
+                    observer.disconnect();
+                }
+            });
+            
+            observer.observe(stat);
+        });
+    };
+    
+    animateNumbers();
+}
+
+// News Section Animation
+function initializeNewsSection() {
+    const newsCards = document.querySelectorAll('.news-card');
+    
+    // Intersection Observer for news cards animation
+    const newsObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }, index * 100);
+                newsObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.2,
+        rootMargin: '50px'
+    });
+    
+    // Set initial state and observe
+    newsCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+        newsObserver.observe(card);
+    });
+    
+    // Add hover effect for news links
+    const newsLinks = document.querySelectorAll('.news-link');
+    newsLinks.forEach(link => {
+        link.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateX(-5px)';
+        });
+        
+        link.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateX(0)';
+        });
+        
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const card = this.closest('.news-card');
+            card.style.transform = 'scale(0.98)';
+            
+            setTimeout(() => {
+                card.style.transform = '';
+                // Navigate to news detail (placeholder)
+                console.log('Navigate to news detail');
+            }, 200);
+        });
+    });
+    
+    // Featured card special animation
+    const featuredCard = document.querySelector('.news-card.featured');
+    if (featuredCard) {
+        featuredCard.addEventListener('mouseenter', function() {
+            this.style.background = 'linear-gradient(135deg, #004d3d 0%, #006b54 100%)';
+        });
+        
+        featuredCard.addEventListener('mouseleave', function() {
+            this.style.background = 'linear-gradient(135deg, #006b54 0%, #004d3d 100%)';
+        });
+    }
+}
+
+// Loading Screen
+function showLoadingScreen() {
+    const loader = document.querySelector('.loading-screen');
+    if (loader) {
+        setTimeout(() => {
+            loader.style.opacity = '0';
+            loader.style.visibility = 'hidden';
+            document.body.style.overflow = 'visible';
+            
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 500);
+        }, 2000);
+    }
+}
+
 // Initialize all functions when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize navbar
+    // Show loading screen
+    showLoadingScreen();
+    
+    // Initialize all components
     initializeNavbar();
-    
-    // Initialize ads tabs
-    initializeAdsTabs();
-    
-    // Initialize premium ads tabs
+    initializeHeroSection();
+    initializeSearchTabs();
     initializePremiumAdsTabs();
+    initializeFeaturedAds();
+    initializeStatistics();
+    initializeTestimonials();
+    initializeNewsSection();
     
-    // Initialize featured ads tabs
-    initializeFeaturedAdsTabs();
-    
-    // Initialize statistics counter
-    initStatisticsCounter();
-    
-    // Force statistics animation after a short delay
-    setTimeout(() => {
-        const statNumbers = document.querySelectorAll('.stat-number');
-        if (statNumbers.length > 0) {
-            console.log('Forcing statistics animation...');
-            statNumbers.forEach(stat => {
-                const target = parseInt(stat.getAttribute('data-count'));
-                const duration = 2000;
-                const increment = target / (duration / 16);
-                let current = 0;
-                
-                const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= target) {
-                        current = target;
-                        clearInterval(timer);
-                    }
-                    stat.textContent = Math.floor(current).toLocaleString();
-                }, 16);
-            });
-        }
-    }, 1000);
-    
-    // Initialize scroll animations
-    initializeScrollAnimations();
-    
-    // Initialize smooth scrolling
-    initializeSmoothScrolling();
-    
-    // Initialize advanced animations
-    initializeAdvancedAnimations();
-    
-    // Initialize property comparison
-    initializeComparison();
-    
-    // Initialize advanced search
-    initializeAdvancedSearch();
-    
-    // Enhance property cards
-    enhancePropertyCards();
-    
-    console.log('🎉 جميع المميزات تم تحميلها بنجاح مع التحديثات الجديدة!');
+    console.log('🎉 جميع المميزات تم تحميلها بنجاح!');
 });
 
 // Navbar Functionality
@@ -64,19 +179,27 @@ function initializeNavbar() {
     const navToggle = document.getElementById('nav-toggle');
     const navMenu = document.getElementById('nav-menu');
     const navLinks = document.querySelectorAll('.nav-link');
+    const navbar = document.getElementById('navbar');
 
     // Mobile menu toggle
-    if (navToggle) {
+    if (navToggle && navMenu) {
         navToggle.addEventListener('click', () => {
             navMenu.classList.toggle('active');
+            navToggle.classList.toggle('active');
             
             // Animate hamburger menu
             const spans = navToggle.querySelectorAll('span');
             spans.forEach((span, index) => {
                 if (navMenu.classList.contains('active')) {
-                    if (index === 0) span.style.transform = 'rotate(45deg) translate(5px, 5px)';
-                    if (index === 1) span.style.opacity = '0';
-                    if (index === 2) span.style.transform = 'rotate(-45deg) translate(7px, -6px)';
+                    if (index === 0) {
+                        span.style.transform = 'rotate(45deg) translate(5px, 5px)';
+                    }
+                    if (index === 1) {
+                        span.style.opacity = '0';
+                    }
+                    if (index === 2) {
+                        span.style.transform = 'rotate(-45deg) translate(7px, -6px)';
+                    }
                 } else {
                     span.style.transform = 'none';
                     span.style.opacity = '1';
@@ -85,19 +208,61 @@ function initializeNavbar() {
         });
     }
 
-    // Close mobile menu when clicking on links
+    // Close mobile menu when clicking on a link
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
-            navMenu.classList.remove('active');
-            const spans = navToggle.querySelectorAll('span');
-            spans.forEach(span => {
-                span.style.transform = 'none';
-                span.style.opacity = '1';
-            });
+            if (navMenu) {
+                navMenu.classList.remove('active');
+            }
+            if (navToggle) {
+                navToggle.classList.remove('active');
+                // Reset hamburger menu
+                const spans = navToggle.querySelectorAll('span');
+                spans.forEach(span => {
+                    span.style.transform = 'none';
+                    span.style.opacity = '1';
+                });
+            }
         });
     });
 
-    // Active link highlighting on scroll
+    // Smooth scroll for nav links
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href');
+            if (targetId && targetId !== '#') {
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    const navHeight = navbar ? navbar.offsetHeight : 70;
+                    const targetPosition = targetSection.offsetTop - navHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Update active link
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                }
+            }
+        });
+    });
+
+    // Navbar background on scroll
+    window.addEventListener('scroll', () => {
+        if (navbar) {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+    });
+    
+    // Update active nav link based on scroll position
     window.addEventListener('scroll', () => {
         let current = '';
         const sections = document.querySelectorAll('section[id]');
@@ -105,11 +270,11 @@ function initializeNavbar() {
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
             const sectionHeight = section.clientHeight;
-            if (scrollY >= (sectionTop - 200)) {
+            if (window.scrollY >= (sectionTop - 100)) {
                 current = section.getAttribute('id');
             }
         });
-
+        
         navLinks.forEach(link => {
             link.classList.remove('active');
             if (link.getAttribute('href') === `#${current}`) {
@@ -117,32 +282,27 @@ function initializeNavbar() {
             }
         });
     });
-
-    // Navbar background on scroll
-    window.addEventListener('scroll', () => {
-        const navbar = document.querySelector('.navbar');
-        if (window.scrollY > 50) {
-            navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-        } else {
-            navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-        }
-    });
 }
 
-// Search Tabs Functionality
-function initSearchTabs() {
+// Search Tabs Functionality - Fixed
+function initializeSearchTabs() {
     const searchTabs = document.querySelectorAll('.search-tab');
     
     searchTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
+        tab.addEventListener('click', function() {
             // Remove active class from all tabs
             searchTabs.forEach(t => t.classList.remove('active'));
             // Add active class to clicked tab
-            tab.classList.add('active');
+            this.classList.add('active');
             
-            // You can add different search functionality here based on tab
-            const tabType = tab.getAttribute('data-tab');
-            console.log(`Search type changed to: ${tabType}`);
+            // Animation effect
+            this.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 200);
+            
+            const tabType = this.textContent.trim();
+            console.log(`تم التبديل إلى: ${tabType}`);
         });
     });
 
@@ -170,32 +330,32 @@ function initSearchTabs() {
 
 // Premium Ads Tabs Functionality
 function initializePremiumAdsTabs() {
-    console.log('Initializing premium ads tabs...');
     const tabs = document.querySelectorAll('.premium-tab');
     const panels = document.querySelectorAll('.premium-panel');
     
-    console.log('Found premium tabs:', tabs.length);
-    console.log('Found premium panels:', panels.length);
+    if (tabs.length === 0) return;
     
     tabs.forEach(tab => {
-        tab.addEventListener('click', (e) => {
+        tab.addEventListener('click', function(e) {
             e.preventDefault();
-            console.log('Premium tab clicked:', tab.dataset.tab);
             
             // Remove active class from all tabs and panels
             tabs.forEach(t => t.classList.remove('active'));
-            panels.forEach(p => p.classList.remove('active'));
+            panels.forEach(p => {
+                p.classList.remove('active');
+                p.style.display = 'none';
+            });
             
             // Add active class to clicked tab
-            tab.classList.add('active');
+            this.classList.add('active');
             
             // Show corresponding panel
-            const targetPanel = document.getElementById(`${tab.dataset.tab}-panel`);
+            const targetPanel = document.getElementById(`${this.dataset.tab}-panel`);
             if (targetPanel) {
+                targetPanel.style.display = 'block';
                 targetPanel.classList.add('active');
-                console.log('Activated panel:', targetPanel.id);
                 
-                // Add animation to cards
+                // Animate cards in the panel
                 const cards = targetPanel.querySelectorAll('.premium-card');
                 cards.forEach((card, index) => {
                     card.style.opacity = '0';
@@ -205,66 +365,34 @@ function initializePremiumAdsTabs() {
                         card.style.transition = 'all 0.6s ease';
                         card.style.opacity = '1';
                         card.style.transform = 'translateY(0)';
-                    }, index * 200);
+                    }, index * 150);
                 });
-            } else {
-                console.log('Panel not found for:', tab.dataset.tab);
             }
         });
     });
-
-    // Add your ad button functionality
-    const addAdBtn = document.querySelector('.add-ad-btn');
-    if (addAdBtn) {
-        addAdBtn.addEventListener('click', () => {
-            // Add loading animation
-            addAdBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحميل...';
-            addAdBtn.disabled = true;
-            
-            setTimeout(() => {
-                addAdBtn.innerHTML = 'أضف إعلانك الآن';
-                addAdBtn.disabled = false;
-                alert('سيتم توجيهك إلى صفحة إضافة الإعلان');
-            }, 2000);
-        });
-    }
-
-    // Premium card interactions
+    
+    // Add hover effects to premium cards
     const premiumCards = document.querySelectorAll('.premium-card');
     premiumCards.forEach(card => {
         card.addEventListener('mouseenter', () => {
-            card.style.transform = 'translateY(-15px) scale(1.02)';
+            card.style.transform = 'translateY(-10px) scale(1.02)';
+            card.style.boxShadow = '0 20px 40px rgba(0, 107, 84, 0.2)';
         });
         
         card.addEventListener('mouseleave', () => {
             card.style.transform = 'translateY(0) scale(1)';
+            card.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.1)';
         });
     });
-}
-
-// Ads Tabs Functionality
-function initAdsTabs() {
-    const adsTabs = document.querySelectorAll('.ads-tab');
-    const adsPanels = document.querySelectorAll('.ads-panel');
     
-    adsTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            const targetTab = tab.getAttribute('data-tab');
-            
-            // Remove active class from all tabs and panels
-            adsTabs.forEach(t => t.classList.remove('active'));
-            adsPanels.forEach(p => p.classList.remove('active'));
-            
-            // Add active class to clicked tab and corresponding panel
-            tab.classList.add('active');
-            document.getElementById(`${targetTab}-panel`).classList.add('active');
-            
-            // Add fade animation
-            const activePanel = document.getElementById(`${targetTab}-panel`);
-            activePanel.style.opacity = '0';
-            setTimeout(() => {
-                activePanel.style.opacity = '1';
-            }, 100);
+    // Add click handler for premium buttons
+    const premiumBtns = document.querySelectorAll('.premium-btn');
+    premiumBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const card = btn.closest('.premium-card');
+            const title = card.querySelector('h3').textContent;
+            showNotification(`تم فتح تفاصيل: ${title}`, 'success');
         });
     });
 }
@@ -364,55 +492,40 @@ function initTestimonialSlider() {
 }
 
 // Statistics Counter Animation
-function initStatisticsCounter() {
-    const statNumbers = document.querySelectorAll('.stat-number');
-    let hasAnimated = false;
-
-    function animateCounters() {
-        if (hasAnimated) return;
-        
-        statNumbers.forEach(stat => {
-            const target = parseInt(stat.getAttribute('data-count'));
-            const duration = 2000; // 2 seconds
-            const increment = target / (duration / 16); // 60fps
-            let current = 0;
-            
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    current = target;
-                    clearInterval(timer);
-                }
-                
-                // Format number with commas
-                stat.textContent = Math.floor(current).toLocaleString();
-            }, 16);
-        });
-        
-        hasAnimated = true;
-    }
-
-    // Trigger animation when statistics section is in view
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                animateCounters();
-            }
-        });
-    }, { threshold: 0.2 });
-
+function initializeStatistics() {
     const statsSection = document.querySelector('.statistics');
+    if (!statsSection) return;
+    
+    const stats = statsSection.querySelectorAll('.stat-number');
+    let hasAnimated = false;
+    
+    const animateCounter = (element, target) => {
+        let current = 0;
+        const increment = target / 100;
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                element.textContent = target + '+';
+                clearInterval(timer);
+            } else {
+                element.textContent = Math.floor(current) + '+';
+            }
+        }, 20);
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !hasAnimated) {
+            hasAnimated = true;
+            stats.forEach(stat => {
+                const text = stat.textContent.replace('+', '');
+                const target = parseInt(text) || 1000;
+                animateCounter(stat, target);
+            });
+        }
+    }, { threshold: 0.3 });
+    
     if (statsSection) {
         observer.observe(statsSection);
-        // Also trigger immediately if section is already visible
-        setTimeout(() => {
-            const rect = statsSection.getBoundingClientRect();
-            if (rect.top < window.innerHeight && rect.bottom > 0) {
-                animateCounters();
-            }
-        }, 500);
-    } else {
-        console.log('Statistics section not found');
     }
 }
 
@@ -599,6 +712,45 @@ function addScrollToTop() {
 
 // Initialize scroll to top
 addScrollToTop();
+
+// Initialize service cards animations
+function animateServiceCards() {
+    const serviceCards = document.querySelectorAll('.service-card');
+    
+    if (serviceCards.length === 0) return;
+    
+    serviceCards.forEach((card, index) => {
+        // Add initial animation
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        
+        setTimeout(() => {
+            card.style.transition = 'all 0.8s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 200);
+        
+        // Add hover effects
+        card.addEventListener('mouseenter', () => {
+            const icon = card.querySelector('.service-icon');
+            if (icon) {
+                icon.style.transform = 'scale(1.1) rotate(5deg)';
+            }
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            const icon = card.querySelector('.service-icon');
+            if (icon) {
+                icon.style.transform = 'scale(1) rotate(0)';
+            }
+        });
+    });
+}
+
+// Call service cards initialization
+setTimeout(() => {
+    animateServiceCards();
+}, 500);
 
 // Performance optimization
 window.addEventListener('load', () => {
@@ -802,6 +954,7 @@ document.addEventListener('click', (e) => {
 let selectedProperties = [];
 
 function initializeComparison() {
+    return; // Feature disabled
     const startBtn = document.getElementById('start-comparison');
     const propertyCards = document.querySelectorAll('.property-card');
     
@@ -900,10 +1053,17 @@ function showComparisonTable() {
     table.scrollIntoView({ behavior: 'smooth' });
 }
 
+// Advanced Search Filters (disabled)
+function initializeFeaturedAds() {
+    console.log('Featured ads initialized');
+}
 
+function initializeTestimonials() {
+    console.log('Testimonials initialized');
+}
 
-// Advanced Search Filters
 function initializeAdvancedSearch() {
+    return; // Feature removed
     console.log('Initializing advanced search...');
     
     const roomButtons = document.querySelectorAll('.room-btn');
@@ -1089,27 +1249,53 @@ function enhancePropertyCards() {
     const propertyCards = document.querySelectorAll('.property-card');
     
     propertyCards.forEach(card => {
-        // Add favorite button
-        const favoriteBtn = document.createElement('button');
-        favoriteBtn.className = 'favorite-btn';
-        favoriteBtn.innerHTML = '🤍';
-        favoriteBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            toggleFavorite(favoriteBtn);
+        // Add hover effect with smooth transition
+        card.style.transition = 'all 0.3s ease';
+        
+        card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-5px)';
+            card.style.boxShadow = '0 15px 35px rgba(0, 107, 84, 0.15)';
         });
         
-        card.appendChild(favoriteBtn);
-        
-        // Add quick view button
-        const quickViewBtn = document.createElement('button');
-        quickViewBtn.className = 'quick-view-btn';
-        quickViewBtn.textContent = 'عرض سريع';
-        quickViewBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            showQuickView(card);
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'translateY(0)';
+            card.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.1)';
         });
         
-        card.appendChild(quickViewBtn);
+        // Add click handler for property button
+        const btn = card.querySelector('.property-btn');
+        if (btn) {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const title = card.querySelector('h3').textContent;
+                showNotification(`جاري عرض تفاصيل: ${title}`, 'info');
+                setTimeout(() => {
+                    showQuickView(card);
+                }, 500);
+            });
+        }
+    });
+    
+    // Add animation on scroll
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '0';
+                entry.target.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    entry.target.style.transition = 'all 0.6s ease';
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }, 100);
+                
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    propertyCards.forEach(card => {
+        observer.observe(card);
     });
 }
 
@@ -1118,55 +1304,141 @@ function toggleFavorite(btn) {
     btn.innerHTML = isFavorite ? '🤍' : '❤️';
     btn.classList.toggle('favorited', !isFavorite);
     
-    const message = isFavorite ? 'تم إزالة العقار من المفضلة' : 'تم إضافة العقار للمفضلة';
-    showNotification(message, 'success');
+    showNotification(
+        isFavorite ? 'تمت الإزالة من المفضلة' : 'تمت الإضافة إلى المفضلة',
+        'success'
+    );
 }
 
 function showQuickView(card) {
-    const title = card.querySelector('h3')?.textContent || 'عقار';
-    const price = card.querySelector('.price')?.textContent || 'غير محدد';
-    const image = card.querySelector('img')?.src || '';
+    const title = card.querySelector('h3').textContent;
+    const price = card.querySelector('.property-price').textContent;
+    const location = card.querySelector('.property-location').textContent;
+    const image = card.querySelector('.property-image img').src;
     
-    const modal = document.createElement('div');
-    modal.className = 'quick-view-modal';
-    modal.innerHTML = `
-        <div class="modal-content">
-            <button class="modal-close">&times;</button>
-            <div class="modal-header">
-                <h3>${title}</h3>
-                <span class="modal-price">${price}</span>
-            </div>
-            <div class="modal-body">
-                <img src="${image}" alt="${title}" class="modal-image">
-                <div class="modal-details">
-                    <p>تفاصيل العقار ستظهر هنا...</p>
-                    <button class="btn btn-primary">اتصل الآن</button>
-                    <button class="btn btn-secondary">جدولة زيارة</button>
+    // Create modal content
+    const modalContent = `
+        <div class="quick-view-modal">
+            <div class="quick-view-content">
+                <button class="close-modal">&times;</button>
+                <img src="${image}" alt="${title}">
+                <h2>${title}</h2>
+                <p class="price">${price}</p>
+                <p class="location">${location}</p>
+                <div class="modal-actions">
+                    <button class="btn btn-primary">عرض التفاصيل</button>
+                    <button class="btn btn-secondary">اتصل بنا</button>
                 </div>
             </div>
         </div>
     `;
     
-    document.body.appendChild(modal);
+    // Add modal to body
+    document.body.insertAdjacentHTML('beforeend', modalContent);
     
-    // Show modal with animation
-    setTimeout(() => {
-        modal.classList.add('show');
-    }, 10);
+    // Add close functionality
+    const modal = document.querySelector('.quick-view-modal');
+    const closeBtn = modal.querySelector('.close-modal');
     
-    // Close modal functionality
-    const closeBtn = modal.querySelector('.modal-close');
     closeBtn.addEventListener('click', () => {
-        modal.classList.remove('show');
-        setTimeout(() => {
-            document.body.removeChild(modal);
-        }, 300);
+        modal.remove();
     });
     
-    // Close on backdrop click
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
-            closeBtn.click();
+            modal.remove();
+        }
+    });
+}
+
+// Animate reason cards on scroll
+function animateReasonCards() {
+    const reasonCards = document.querySelectorAll('.reason-card');
+    
+    if (!reasonCards.length) return;
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.style.opacity = '0';
+                    entry.target.style.transform = 'translateY(30px)';
+                    
+                    setTimeout(() => {
+                        entry.target.style.transition = 'all 0.6s ease';
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }, index * 100);
+                }, 100);
+                
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    reasonCards.forEach(card => {
+        card.style.opacity = '0';
+        observer.observe(card);
+    });
+}
+
+// Animate news cards on scroll
+function animateNewsCards() {
+    const newsCards = document.querySelectorAll('.news-card');
+    
+    if (newsCards.length === 0) return;
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.classList.add('visible');
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }, index * 100);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '50px'
+    });
+    
+    newsCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+        observer.observe(card);
+    });
+    
+    // Add hover effects
+    newsCards.forEach(card => {
+        let isHovered = false;
+        
+        card.addEventListener('mouseenter', () => {
+            if (!isHovered) {
+                isHovered = true;
+                card.style.transform = 'translateY(-8px) scale(1.02)';
+                card.style.boxShadow = '0 20px 40px rgba(0, 107, 84, 0.15)';
+            }
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            isHovered = false;
+            card.style.transform = 'translateY(0) scale(1)';
+            card.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.08)';
+        });
+    });
+    
+    // Add click handler for news links
+    newsCards.forEach(card => {
+        const newsLink = card.querySelector('.news-link');
+        if (newsLink) {
+            newsLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                const title = card.querySelector('h3').textContent;
+                showNotification(`جاري تحميل: ${title}`, 'info');
+            });
         }
     });
 }
