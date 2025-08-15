@@ -18,48 +18,81 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loader-container">
+            <div class="loader-logo">
+                <i class="fas fa-home"></i>
+            </div>
+            <h2 class="loader-text">مسعاك العقارية</h2>
+            <div class="loader-spinner"></div>
+            <p class="loader-subtitle">جاري التحميل...</p>
+        </div>
+    </div>
+
     <!-- Navbar -->
-    <nav class="navbar">
-        <div class="container">
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
             <div class="nav-brand">
-                <div class="logo">
+                <a href="#home" class="logo">
                     <i class="fas fa-building"></i>
                     <span>مسعاك العقارية</span>
+                </a>
+            </div>
+            
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#home" class="nav-link active">الرئيسية</a></li>
+                <li><a href="#properties" class="nav-link">العقارات</a></li>
+                <li><a href="#services" class="nav-link">الخدمات</a></li>
+                <li><a href="#news" class="nav-link">الأخبار</a></li>
+                <li><a href="#about" class="nav-link">من نحن</a></li>
+                <li><a href="#contact" class="nav-link">تواصل معنا</a></li>
+            </ul>
+            
+            <div class="nav-actions">
+                <button class="login-btn">
+                    <i class="fas fa-user"></i>
+                    <span>تسجيل الدخول</span>
+                </button>
+                <div class="nav-toggle" id="nav-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
-            </div>
-            
-            <div class="nav-menu" id="nav-menu">
-                <ul class="nav-list">
-                    <li><a href="#home" class="nav-link active">الرئيسية</a></li>
-                    <li><a href="#properties" class="nav-link">العقارات</a></li>
-                    <li><a href="#services" class="nav-link">الخدمات</a></li>
-                    <li><a href="#about" class="nav-link">من نحن</a></li>
-                    <li><a href="#contact" class="nav-link">تواصل معنا</a></li>
-                </ul>
-                <button class="login-btn">تسجيل الدخول</button>
-            </div>
-            
-            <div class="nav-toggle" id="nav-toggle">
-                <span></span>
-                <span></span>
-                <span></span>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-background"></div>
-        <div class="container">
-            <div class="hero-content">
-                <h1 class="hero-title">
-                    <span class="typing-text">عقارك المثالي ينتظرك</span>
-                </h1>
-                <p class="hero-subtitle">اكتشف أفضل العقارات في المملكة مع مسعاك العقارية</p>
-                
-                <div class="hero-buttons">
-                    <a href="#properties" class="btn btn-primary">تصفح العقارات</a>
-                    <a href="#advanced-search" class="btn btn-secondary">بحث متقدم</a>
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                ابحث عن <span class="hero-highlight">عقار أحلامك</span>
+            </h1>
+            <p class="hero-subtitle">
+                أكبر منصة عقارية موثوقة في الأحساء والمنطقة الشرقية
+            </p>
+            
+            <div class="hero-search">
+                <input type="text" class="hero-search-input" placeholder="ابحث عن شقة، فيلا، أرض...">
+                <button class="hero-search-btn">
+                    <i class="fas fa-search"></i>
+                    <span>بحث</span>
+                </button>
+            </div>
+            
+            <div class="hero-quick-stats">
+                <div class="quick-stat">
+                    <i class="fas fa-building"></i>
+                    <span>+5000 عقار</span>
+                </div>
+                <div class="quick-stat">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <span>جميع الأحياء</span>
+                </div>
+                <div class="quick-stat">
+                    <i class="fas fa-certificate"></i>
+                    <span>موثوق 100%</span>
                 </div>
             </div>
         </div>
@@ -420,94 +453,52 @@
         </div>
     </section>
 
-    <!-- Property Comparison Tool -->
-    <section class="property-comparison" id="comparison">
-        <div class="container">
-            <div class="section-header">
-                <h2>مقارنة العقارات</h2>
-                <p>قارن بين العقارات المختلفة لاتخاذ القرار الأمثل</p>
-            </div>
-            
-            <div class="comparison-tool">
-                <div class="comparison-header">
-                    <button class="btn btn-primary" id="start-comparison">ابدأ المقارنة</button>
-                    <div class="selected-properties" id="selected-properties">
-                        <span class="selection-count">0 عقار محدد</span>
-                    </div>
-                </div>
-                
-                <div class="comparison-table" id="comparison-table" style="display: none;">
-                    <div class="comparison-grid">
-                        <div class="comparison-row header">
-                            <div class="comparison-cell">المواصفات</div>
-                            <div class="comparison-cell">العقار الأول</div>
-                            <div class="comparison-cell">العقار الثاني</div>
-                            <div class="comparison-cell">العقار الثالث</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
 
-    <!-- Advanced Search Filters -->
-    <section class="advanced-search" id="advanced-search">
+
+    <!-- Real Estate News Section -->
+    <section class="real-estate-news" id="news">
         <div class="container">
             <div class="section-header">
-                <h2>البحث المتقدم</h2>
-                <p>ابحث عن العقار المثالي باستخدام المرشحات المتقدمة</p>
+                <h2>أحدث الأخبار العقارية</h2>
+                <p>تابع آخر التطورات والأخبار في السوق العقاري بالأحساء والمنطقة الشرقية</p>
             </div>
             
-            <div class="search-filters">
-                <div class="filter-group">
-                    <h4>نوع العقار</h4>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" value="apartment"> شقة</label>
-                        <label><input type="checkbox" value="villa"> فيلا</label>
-                        <label><input type="checkbox" value="house"> دور</label>
-                        <label><input type="checkbox" value="land"> أرض</label>
-                        <label><input type="checkbox" value="commercial"> تجاري</label>
+            <div class="news-grid">
+                <div class="news-card featured">
+                    <div class="news-image">
+                        <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=250&fit=crop" alt="أخبار عقارية">
+                        <div class="news-date">15 أغسطس 2025</div>
+                    </div>
+                    <div class="news-content">
+                        <h3>ارتفاع أسعار العقارات في الأحساء بنسبة 12%</h3>
+                        <p>شهدت منطقة الأحساء نمواً ملحوظاً في أسعار العقارات السكنية خلال النصف الأول من العام...</p>
+                        <a href="#" class="news-link">اقرأ المزيد</a>
                     </div>
                 </div>
                 
-                <div class="filter-group">
-                    <h4>عدد الغرف</h4>
-                    <div class="room-selector">
-                        <button class="room-btn" data-rooms="1">1</button>
-                        <button class="room-btn" data-rooms="2">2</button>
-                        <button class="room-btn" data-rooms="3">3</button>
-                        <button class="room-btn" data-rooms="4">4</button>
-                        <button class="room-btn" data-rooms="5+">5+</button>
+                <div class="news-card">
+                    <div class="news-image">
+                        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=250&fit=crop" alt="مشاريع جديدة">
+                        <div class="news-date">12 أغسطس 2025</div>
+                    </div>
+                    <div class="news-content">
+                        <h3>إطلاق مشاريع سكنية جديدة في المبرز</h3>
+                        <p>تم الإعلان عن مشاريع سكنية حديثة تضم أكثر من 500 وحدة سكنية بمواصفات عالمية...</p>
+                        <a href="#" class="news-link">اقرأ المزيد</a>
                     </div>
                 </div>
                 
-                <div class="filter-group">
-                    <h4>المساحة (م²)</h4>
-                    <div class="range-slider">
-                        <input type="range" id="area-min" min="50" max="1000" value="100">
-                        <input type="range" id="area-max" min="50" max="1000" value="500">
-                        <div class="range-display">
-                            <span id="area-min-value">100</span> - <span id="area-max-value">500</span> م²
-                        </div>
+                <div class="news-card">
+                    <div class="news-image">
+                        <img src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=400&h=250&fit=crop" alt="قوانين عقارية">
+                        <div class="news-date">10 أغسطس 2025</div>
                     </div>
-                </div>
-                
-                <div class="filter-group">
-                    <h4>المميزات</h4>
-                    <div class="features-grid">
-                        <label><input type="checkbox" value="parking"> موقف سيارات</label>
-                        <label><input type="checkbox" value="garden"> حديقة</label>
-                        <label><input type="checkbox" value="pool"> مسبح</label>
-                        <label><input type="checkbox" value="gym"> نادي رياضي</label>
-                        <label><input type="checkbox" value="security"> أمن 24/7</label>
-                        <label><input type="checkbox" value="elevator"> مصعد</label>
+                    <div class="news-content">
+                        <h3>تحديثات جديدة في قوانين التملك العقاري</h3>
+                        <p>أعلنت وزارة الإسكان عن تحديثات مهمة في أنظمة التملك العقاري تهدف لتسهيل الإجراءات...</p>
+                        <a href="#" class="news-link">اقرأ المزيد</a>
                     </div>
-                </div>
-                
-                <div class="filter-actions">
-                    <button class="btn btn-primary search-btn">تطبيق المرشحات</button>
-                    <button class="btn btn-secondary reset-btn">إعادة تعيين</button>
                 </div>
             </div>
         </div>
