@@ -140,20 +140,107 @@ function initializeNewsSection() {
     }
 }
 
-// Loading Screen
+// Simple Loading Screen
 function showLoadingScreen() {
-    const loader = document.querySelector('.loading-screen');
-    if (loader) {
+    const loadingScreen = document.getElementById('loading-screen');
+    
+    if (!loadingScreen) return;
+    
+    // Add loading class to body
+    document.body.classList.add('loading');
+    
+    // Function to hide loading screen
+    function hideLoadingScreen() {
+        if (!loadingScreen) return;
+        
+        loadingScreen.style.opacity = '0';
+        document.body.classList.remove('loading');
+        document.body.classList.add('loaded');
+        
+        // Remove from DOM after fade out
         setTimeout(() => {
-            loader.style.opacity = '0';
-            loader.style.visibility = 'hidden';
-            document.body.style.overflow = 'visible';
-            
-            setTimeout(() => {
-                loader.style.display = 'none';
-            }, 500);
-        }, 2000);
+            if (loadingScreen && loadingScreen.parentNode) {
+                loadingScreen.remove();
+            }
+        }, 300);
     }
+    
+    // Hide loading screen when page is loaded
+    if (document.readyState === 'complete') {
+        setTimeout(hideLoadingScreen, 800);
+    } else {
+        window.addEventListener('load', () => {
+            setTimeout(hideLoadingScreen, 800);
+        });
+    }
+    
+    // Fallback: hide after 3 seconds
+    setTimeout(hideLoadingScreen, 3000);
+}
+
+// Scroll Animations
+function initializeScrollAnimations() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                
+                // For stagger animations on cards
+                const staggerElements = entry.target.querySelectorAll('.stagger-animate');
+                staggerElements.forEach((el, index) => {
+                    setTimeout(() => {
+                        el.classList.add('visible');
+                    }, index * 100);
+                });
+            }
+        });
+    }, observerOptions);
+    
+    // Observe all sections and animated elements
+    const animatedElements = document.querySelectorAll('.section-animate, .fade-up, .fade-left, .fade-right, .scale-in');
+    animatedElements.forEach(el => observer.observe(el));
+    
+    // Add animation classes to sections
+    const sections = document.querySelectorAll('section');
+    sections.forEach((section, index) => {
+        if (!section.classList.contains('hero')) {
+            section.classList.add('section-animate');
+        }
+    });
+    
+    // Add animation to specific elements
+    document.querySelectorAll('.section-header').forEach(el => {
+        el.classList.add('fade-up');
+    });
+    
+    document.querySelectorAll('.feature-card').forEach((el, index) => {
+        el.classList.add('fade-up', 'stagger-animate');
+    });
+    
+    document.querySelectorAll('.property-card').forEach((el, index) => {
+        el.classList.add('scale-in', 'stagger-animate');
+    });
+    
+    document.querySelectorAll('.premium-card').forEach((el, index) => {
+        el.classList.add('fade-up', 'stagger-animate');
+    });
+    
+    document.querySelectorAll('.testimonial-card').forEach((el, index) => {
+        el.classList.add('fade-' + (index % 2 === 0 ? 'left' : 'right'));
+    });
+    
+    document.querySelectorAll('.news-card').forEach((el, index) => {
+        el.classList.add('fade-up', 'stagger-animate');
+    });
+    
+    // Re-observe elements after adding classes
+    document.querySelectorAll('.section-animate, .fade-up, .fade-left, .fade-right, .scale-in')
+        .forEach(el => observer.observe(el));
 }
 
 // Initialize all functions when DOM is loaded
@@ -170,6 +257,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeStatistics();
     initializeTestimonials();
     initializeNewsSection();
+    initializeScrollAnimations();
     
     console.log('🎉 جميع المميزات تم تحميلها بنجاح!');
 });
